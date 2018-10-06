@@ -11,7 +11,7 @@ class Handler {
     const isNameInTarget = target.has(name);
     if (isNameInTarget) {
       const value = target.get(name);
-      return this.wrapValueWhenImmutable(value);
+      return createImmutableProxy(value);
     }
 
     // when targeting attribute and method attached to an immutable collections
@@ -22,27 +22,26 @@ class Handler {
       return (...args) => {
         const value = attribute.apply(target, args);
         // if value return is an immutable collections return the value as a proxy
-        return this.wrapValueWhenImmutable(value);
+        return createImmutableProxy(value);
       };
     }
     return attribute;
   }
+}
 
-  // wraps a value in a proxy when value is an immutable collections
-  wrapValueWhenImmutable(value) {
-    if (isImmutable(value)) {
-      const handler = new Handler();
-      return new Proxy(value, handler);
-    }
+// wraps a value in a proxy when value is an immutable collections
+function createImmutableProxy(value, throwError = false) {
+  if (!isImmutable(value)) {
+    if (throwError) throw new Error('Expected an immutable object');
     return value;
   }
+
+  const handler = new Handler();
+  return new Proxy(value, handler);
 }
 
 function immutableWrapper(immutableObject) {
-  if (!isImmutable(immutableObject))
-    throw new Error('Expected an immutable object');
-  const handler = new Handler();
-  return new Proxy(immutableObject, handler);
+  return createImmutableProxy(immutableObject, true);
 }
 
 export default immutableWrapper;
