@@ -14,7 +14,7 @@ describe('Testing', () => {
     const map = fromJS({ name });
     const wrappedMap = immutableWrapper(map);
     // eslint-disable-next-line
-    expect(wrappedMap["name"]).toBe(name);
+    expect(wrappedMap['name']).toBe(name);
   });
 
   it('should be able to access object property using object destructuring', () => {
@@ -44,6 +44,16 @@ describe('Testing', () => {
     const wrappedMap = immutableWrapper(map);
     expect(wrappedMap.get(name)).toEqual(map.get(name));
     expect(wrappedMap.has(name)).toEqual(map.has(name));
+  });
+
+  it('should be immutable', () => {
+    const name = 'testing user';
+    const map = fromJS({ name });
+    const wrappedMap = immutableWrapper(map);
+    const newWrappedMap = wrappedMap.set('name', 'new user');
+    expect(newWrappedMap === wrappedMap).toBe(false);
+    expect(newWrappedMap.name).toBe('new user');
+    expect(wrappedMap.name).toBe(name);
   });
 
   it('should throw an error when a non immutable object is passed in', () => {
