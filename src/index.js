@@ -8,8 +8,8 @@ import { isImmutable } from 'immutable';
 class Handler {
   get(target, name) {
     // when targeting that value store in the immutable collections
-    const isNameInTarget = target.has(name);
-    if (isNameInTarget) {
+    const isValue = target.has(name);
+    if (isValue) {
       const value = target.get(name);
       return createImmutableProxy(value);
     }
