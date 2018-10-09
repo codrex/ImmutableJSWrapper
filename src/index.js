@@ -40,8 +40,4 @@ function createImmutableProxy(value, throwError = false) {
   return new Proxy(value, handler);
 }
 
-function immutableWrapper(immutableObject) {
-  return createImmutableProxy(immutableObject, true);
-}
-
-export default immutableWrapper;
+export default createImmutableProxy;
