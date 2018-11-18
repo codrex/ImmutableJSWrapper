@@ -10,7 +10,7 @@ class Handler {
     if (typeof name === 'symbol') {
       return target[name];
     }
-    // when checking that value store in the immutable collections
+    // checking that value store in the immutable collections
     const isValue = target.has(name);
 
     if (isValue) {
