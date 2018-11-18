@@ -1,4 +1,4 @@
-import { isImmutable } from 'immutable';
+import { isImmutable, List } from 'immutable';
 /**
  * This a simple proxy wrapper around immutable js collections.
  * It makes getting values from an immutable js collections behave the same
@@ -7,8 +7,12 @@ import { isImmutable } from 'immutable';
 /* eslint-disable class-methods-use-this */
 class Handler {
   get(target, name) {
-    // when targeting that value store in the immutable collections
+    if (typeof name === 'symbol') {
+      return target[name];
+    }
+    // when checking that value store in the immutable collections
     const isValue = target.has(name);
+
     if (isValue) {
       const value = target.get(name);
       return createImmutableProxy(value);
@@ -26,6 +30,21 @@ class Handler {
       };
     }
     return attribute;
+  }
+
+  getOwnPropertyDescriptor(target, name) {
+    const hasProperty = target.has(name);
+    if (hasProperty) {
+      return { configurable: true, enumerable: true, value: target.get(name) };
+    }
+  }
+
+  ownKeys(target) {
+    const keys = [];
+    target.map((value, key) => {
+      keys.push(key);
+    });
+    return keys;
   }
 }
 
