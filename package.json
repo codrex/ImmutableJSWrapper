@@ -7,7 +7,7 @@
   "license": "MIT",
   "private": false,
   "devDependencies": {
-    "@babel/core": "^7.1.2",
+    "@babel/core": "^7.1.6",
     "@babel/preset-env": "^7.1.0",
     "babel-core": "^7.0.0-0",
     "babel-eslint": "7.2.3",
@@ -20,7 +20,7 @@
     "regenerator-runtime": "^0.12.1"
   },
   "scripts": {
-    "build": "node scripts/build.js",
+    "build": "babel src/ --ignore=src/test --out-dir=dist --source-maps",
     "predeploy": "yarn build",
     "test": "jest"
   },
@@ -46,7 +46,6 @@
       "<rootDir>/src/**/?(*.)(spec|test).{js}"
     ],
     "testEnvironment": "node",
-    "testURL": "http://localhost",
     "transform": {
       "^.+\\.(js)$": "<rootDir>/node_modules/babel-jest"
     },
@@ -62,6 +61,7 @@
     ]
   },
   "dependencies": {
+    "@babel/cli": "^7.1.5",
     "jest-cli": "^23.6.0"
   }
 }
